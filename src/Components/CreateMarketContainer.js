@@ -1,32 +1,52 @@
 import React, { useRef } from 'react';
 import MarketDisplay from './MarketDisplay'
-import { markets } from '../atoms';
+import { markets, totalAtom } from '../atoms';
 import { useRecoilState } from 'recoil';
 
 const CreateMarketContainer = () => {
-    const [card, addNewCard] = useRecoilState(markets)
+    const [card, addNewMarket] = useRecoilState(markets)
+    const [atom, setAtom] = useRecoilState(totalAtom)
     const inputEl = useRef(null);
 
-    const addCard = (e) => {
+
+    const addMarket = (e) => {
         e.preventDefault()
         const location = inputEl.current.value
-        addNewCard([
-          ...card,
-          {
-            "marketId": card[card.length-1].marketId + 1,
+        addNewMarket([...card,{
+            "marketId": atom.lastMarketId,
             "location": location,
-            "cards": 1,
-          }
-        ])
-        inputEl.current.value = '';
-      }
+            "cards": 1
+        }])
+
+        setAtom({
+            'totalCards': atom.totalCards + 1,
+            'totalMarkets': atom.totalMarkets + 1,
+            'lastMarketId': atom.lastMarketId + 1
+            }
+        )
+        console.log(card, atom)
+    }
+
+    // const addCard = (e) => {
+    //     e.preventDefault()
+    //     const location = inputEl.current.value
+    //     addNewCard([
+    //       ...card,
+    //       {
+    //         "marketId": card[card.length-1].marketId + 1,
+    //         "location": location,
+    //         "cards": 1,
+    //       }
+    //     ])
+    //     inputEl.current.value = '';
+    //   }
     
 
 
     return (
       <div className='innerbox'>
         <h2>Create New Market</h2>
-        <form onSubmit={addCard}>
+        <form onSubmit={addMarket}>
             <label>Location: </label>
             <input ref={inputEl} placeholder='Enter Location'/>
             <button type="submit">Add Market</button>

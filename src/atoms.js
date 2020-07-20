@@ -13,29 +13,13 @@ import {
 // We used selector instead for TotalsDisplay 
 export const totalAtom = atom({
   key: 'total',
-  default: {'totalCards': 1, 'totalMarkets': 1}
+  default: {'totalCards': 0, 'totalMarkets': 0, 'lastMarketId': 10000}
 })
 
-// export const totalCardsSelector = selector({
-//   key: 'totalCards',
-//   get: ({get}) => {
-//     const totalCardsArr = get(markets);
-//     const totalCardsLength = totalCardsArr.length;
-//     const totalCards = totalCardsArr.reduce((acc, cur) => {
-//       console.log('inside totalcardsSelector:', totalCardsArr)
-//       return acc + cur.cards
-//     }, 0)
-//     return { totalCards, totalCardsLength }
-//   }
-// })
 
 export const markets = atom({
   key:'markets',
-  default: [{
-    "marketId": 10000,
-    "location": 'Fuck u',
-    "cards": 1,
-  }]
+  default: []
 })
 
 export default { markets, totalAtom };

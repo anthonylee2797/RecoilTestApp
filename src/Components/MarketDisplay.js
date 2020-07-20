@@ -3,34 +3,43 @@ import { useRecoilState } from 'recoil';
 import { totalAtom, markets } from '../atoms';
 
 const MarketDisplay = ({ marketId, location, cards }) => {
+   const [atom, setAtom] = useRecoilState(totalAtom)
    const [market, setMarket] = useRecoilState(markets)
 
-
-  const addCard = () => {
-    console.log(market);
-    // market.forEach(el => console.log(el.cards, marketId))
-    let test = market.map((el) => {
-      console.log(el)
-      if (el.marketId === marketId) {
-        el.cards = el.cards + 1;
-      }
-      return el;
+   const addCard = () => {
+       setAtom({
+           'totalCards': atom.totalCards + 1,
+       'totalMarkets': atom.totalMarkets,
+       'lastMarketId': atom.lastMarketId
     })
-    console.log(test);
-    // setMarket(market.map((el) => {
-    //   console.log(el)
-    //   if (el.marketId === marketId) {
-    //     // console.log(
-    //     //   'yes'
-    //     // )
-    //     el.cards = el.cards + 1;
-    //   }
-    // }))
-  }
 
-  const deleteCard = () => {
-    console.log(market)
-  }
+    let copy = JSON.parse(JSON.stringify(market))
+    copy.map((el) => {
+        if (el.marketId === marketId){
+            el.cards++
+        }
+    })
+
+    setMarket(copy)
+   }
+
+   const deleteCard = () => {
+    setAtom({
+        'totalCards': atom.totalCards - 1,
+        'totalMarkets': atom.totalMarkets,
+        'lastMarketId': atom.lastMarketId
+    })
+
+    let copy = JSON.parse(JSON.stringify(market))
+    copy.map((el) => {
+        if (el.marketId === marketId){
+            el.cards--
+        }
+    })
+
+    setMarket(copy)
+ 
+   }
 
    return (
       <div className='marketBox'>
